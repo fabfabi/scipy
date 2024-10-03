@@ -2584,7 +2584,7 @@ class weibull_gen(rv_continuous):
 
     .. math::
 
-        f(x, c) = c x^{c-1} \exp(-x^c)
+        f(x,k,\lambda) = \frac{k}{\lambda} \left( \frac{x}{\lambda} \right)^{k-1} \exp(-(\frac{x}{\lambda} )^c)
 
     for :math:`x > 0`, :math:`c > 0`.
 
@@ -2613,37 +2613,33 @@ class weibull_gen(rv_continuous):
         assert False, "not yet implemented"
         return [_ShapeInfo("c", False, (0, np.inf), (False, False))]
 
-    def _pdf(self, x, lambda_, k):
-        # weibull.pdf(x, lambda_, k) = lambda_ * k * (lambda_ * x)**(k-1) * exp(-(lambda_*x)**c)
-        return lambda_ * k **pow(lambda_ * x , k-1)*np.exp(-pow(lambda_ * x, k))
+    def _pdf(self, x, k, lambda_):
+        return k  / lambda_ * pow(x / lambda_ , k-1)*np.exp(-pow(x / lambda_ , k))
 
-    def _logpdf(self, x, lambda_, k):
-        return np.log(lambda_) + np.log(k) + sc.xlogy(k - 1, lambda_ * x) - pow(lambda_ * x, k)
+    def _logpdf(self, x, k, lambda_):
+        return -np.log(lambda_) + np.log(k) + sc.xlogy(k - 1,  x / lambda_ ) - pow(x / lambda_ , k)
 
-    def _cdf(self,x, lambda_, k):
-        return -sc.expm1(-pow(lambda_ * x, k))
+    def _cdf(self,x, k, lambda_):
+        return -sc.expm1(-pow(x / lambda_ ))
 
-    def _ppf(self, q, lambda_, k):
+    def _ppf(self, q, k, lambda_):
         return pow(-sc.log1p(-q), 1.0/k)/lambda_
 
-    def _sf(self, x, lambda_, k):
+    def _sf(self, x, k, lambda_):
         # Survival Function
-        assert False, "not yet implemented"
-        return np.exp(self._logsf(x, c))
+        return np.exp(self._logsf(x,k , lambda_))
 
-    def _logsf(self, x, lambda_, k):
-        assert False, "not yet implemented"
-        return -pow(x, c)
+    def _logsf(self, x, k, lambda_):
+        return -pow(x / lambda_, k)
 
-    def _isf(self, q, lambda_, k):
-        assert False, "not yet implemented"
-        return (-np.log(q))**(1/c)
+    def _isf(self, q, k, lambda_):
+        return -pow(np.log(q),1/k)*lambda_
 
-    def _munp(self, n, lambda_, k):
+    def _munp(self, n, k, lambda_):
         assert False, "not yet implemented"
         return sc.gamma(1.0+n*1.0/c)
 
-    def _entropy(self, lambda_, k):
+    def _entropy(self, k, lambda_):
         #taken from https://en.wikipedia.org/wiki/Weibull_distribution
         gamma = 0.57721566490153286060 # Euler-Mascheroni constant taken from wiki
         return gamma * (1- 1/k) + np.log(lambda_/k) + 1
