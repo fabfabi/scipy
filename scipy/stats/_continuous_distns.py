@@ -2564,7 +2564,7 @@ foldnorm = foldnorm_gen(a=0.0, name='foldnorm')
 
 class weibull_gen(rv_continuous):
     r"""
-    NOT YET WORKED ON
+    DESCRIPTION NEEDS TO BE UPDATED
     Weibull continuous random variable.
 
     The Weibull Minimum Extreme Value distribution, from extreme value theory
@@ -2617,36 +2617,36 @@ class weibull_gen(rv_continuous):
         # weibull.pdf(x, lambda_, k) = lambda_ * k * (lambda_ * x)**(k-1) * exp(-(lambda_*x)**c)
         return lambda_ * k **pow(lambda_ * x , k-1)*np.exp(-pow(lambda_ * x, k))
 
-    def _logpdf(self, x, c):
-        assert False, "not yet implemented"
-        return np.log(c) + sc.xlogy(c - 1, x) - pow(x, c)
+    def _logpdf(self, x, lambda_, k):
+        return np.log(lambda_) + np.log(k) + sc.xlogy(k - 1, lambda_ * x) - pow(lambda_ * x, k)
 
     def _cdf(self,x, lambda_, k):
         return -sc.expm1(-pow(lambda_ * x, k))
 
-    def _ppf(self, q, c):
-        assert False, "not yet implemented"
-        return pow(-sc.log1p(-q), 1.0/c)
+    def _ppf(self, q, lambda_, k):
+        return pow(-sc.log1p(-q), 1.0/k)/lambda_
 
-    def _sf(self, x, c):
+    def _sf(self, x, lambda_, k):
+        # Survival Function
         assert False, "not yet implemented"
         return np.exp(self._logsf(x, c))
 
-    def _logsf(self, x, c):
+    def _logsf(self, x, lambda_, k):
         assert False, "not yet implemented"
         return -pow(x, c)
 
-    def _isf(self, q, c):
+    def _isf(self, q, lambda_, k):
         assert False, "not yet implemented"
         return (-np.log(q))**(1/c)
 
-    def _munp(self, n, c):
+    def _munp(self, n, lambda_, k):
         assert False, "not yet implemented"
         return sc.gamma(1.0+n*1.0/c)
 
-    def _entropy(self, c):
-        assert False, "not yet implemented"
-        return -_EULER / c - np.log(c) + _EULER + 1
+    def _entropy(self, lambda_, k):
+        #taken from https://en.wikipedia.org/wiki/Weibull_distribution
+        gamma = 0.57721566490153286060 # Euler-Mascheroni constant taken from wiki
+        return gamma * (1- 1/k) + np.log(lambda_/k) + 1
 
     @extend_notes_in_docstring(rv_continuous, notes="""\
         If ``method='mm'``, parameters fixed by the user are respected, and the
@@ -2732,7 +2732,8 @@ class weibull_gen(rv_continuous):
             # At this point, parameter "guesses" may equal the fixed parameters
             # in kwds. No harm in passing them as guesses, too.
             return super().fit(data, c, loc=loc, scale=scale, **kwds)
-        
+
+weibull = weibull_gen(a=0.0, name='weibull_min')
 
 class weibull_min_gen(rv_continuous):
     r"""Weibull minimum continuous random variable.
