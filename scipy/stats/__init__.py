@@ -153,8 +153,9 @@ Continuous distributions
    vonmises          -- Von-Mises (Circular)
    vonmises_line     -- Von-Mises (Line)
    wald              -- Wald
-   weibull_min       -- Minimum Weibull (see Frechet)
-   weibull_max       -- Maximum Weibull (see Frechet)
+   weibull           -- Standard Weibull (two parameters)
+   weibull_min       -- Minimum Weibull (see Frechet / one parameter)
+   weibull_max       -- Maximum Weibull (see Frechet / one parameter)
    wrapcauchy        -- Wrapped Cauchy
 
 The ``fit`` method of the univariate continuous distributions uses
