@@ -2623,7 +2623,7 @@ class weibull_gen(rv_continuous):
         return -sc.expm1(-pow(x / lambda_ ))
 
     def _ppf(self, q, k, lambda_):
-
+        # point percentile function
         return pow(-sc.log1p(-q), 1.0/k)*lambda_
 
     def _sf(self, x, k, lambda_):
@@ -2631,17 +2631,20 @@ class weibull_gen(rv_continuous):
         return np.exp(self._logsf(x,k , lambda_))
 
     def _logsf(self, x, k, lambda_):
+        # log survival function
         return -pow(x / lambda_, k)
 
     def _isf(self, q, k, lambda_):
+        # inverse survival function
         return -pow(np.log(q),1/k)*lambda_
 
     def _munp(self, n, k, lambda_):
-        assert False, "not yet implemented"
-        return sc.gamma(1.0+n*1.0/c)
+        # Moments of the distribution 
+        #taken from https://en.wikipedia.org/wiki/Weibull_distribution#Moments -> raw moment
+        return pow(lambda_, n) * sc.gamma(1.0+n*1.0/k)
 
     def _entropy(self, k, lambda_):
-        #taken from https://en.wikipedia.org/wiki/Weibull_distribution
+        #taken from https://en.wikipedia.org/wiki/Weibull_distribution#Shannon_entropy
         gamma = 0.57721566490153286060 # Euler-Mascheroni constant taken from wiki
         return gamma * (1- 1/k) + np.log(lambda_/k) + 1
 
