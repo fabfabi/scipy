@@ -2563,7 +2563,9 @@ class foldnorm_gen(rv_continuous):
 foldnorm = foldnorm_gen(a=0.0, name='foldnorm')
 
 class weibull_gen(rv_continuous):
-    r"""Weibull continuous random variable.
+    r"""
+    NOT YET WORKED ON
+    Weibull continuous random variable.
 
     The Weibull Minimum Extreme Value distribution, from extreme value theory
     (Fisher-Gnedenko theorem), is also often simply called the Weibull
@@ -2608,6 +2610,7 @@ class weibull_gen(rv_continuous):
 
     """
     def _shape_info(self):
+        assert False, "not yet implemented"
         return [_ShapeInfo("c", False, (0, np.inf), (False, False))]
 
     def _pdf(self, x, lambda_, k):
@@ -2622,21 +2625,27 @@ class weibull_gen(rv_continuous):
         return -sc.expm1(-pow(lambda_ * x, k))
 
     def _ppf(self, q, c):
+        assert False, "not yet implemented"
         return pow(-sc.log1p(-q), 1.0/c)
 
     def _sf(self, x, c):
+        assert False, "not yet implemented"
         return np.exp(self._logsf(x, c))
 
     def _logsf(self, x, c):
+        assert False, "not yet implemented"
         return -pow(x, c)
 
     def _isf(self, q, c):
+        assert False, "not yet implemented"
         return (-np.log(q))**(1/c)
 
     def _munp(self, n, c):
+        assert False, "not yet implemented"
         return sc.gamma(1.0+n*1.0/c)
 
     def _entropy(self, c):
+        assert False, "not yet implemented"
         return -_EULER / c - np.log(c) + _EULER + 1
 
     @extend_notes_in_docstring(rv_continuous, notes="""\
@@ -2648,6 +2657,7 @@ class weibull_gen(rv_continuous):
         to match the means or minimize a norm of the errors.
         \n\n""")
     def fit(self, data, *args, **kwds):
+        assert False, "not yet implemented"
 
         if isinstance(data, CensoredData):
             if data.num_censored() == 0:
