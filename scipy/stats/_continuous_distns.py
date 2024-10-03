@@ -2623,7 +2623,8 @@ class weibull_gen(rv_continuous):
         return -sc.expm1(-pow(x / lambda_ ))
 
     def _ppf(self, q, k, lambda_):
-        return pow(-sc.log1p(-q), 1.0/k)/lambda_
+
+        return pow(-sc.log1p(-q), 1.0/k)*lambda_
 
     def _sf(self, x, k, lambda_):
         # Survival Function
