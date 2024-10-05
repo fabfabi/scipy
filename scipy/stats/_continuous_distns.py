@@ -2657,7 +2657,6 @@ class weibull_gen(rv_continuous):
         to match the means or minimize a norm of the errors.
         \n\n""")
     def fit(self, data, *args, **kwds):
-        assert False, "not yet implemented"
 
         if isinstance(data, CensoredData):
             if data.num_censored() == 0:
@@ -2677,6 +2676,9 @@ class weibull_gen(rv_continuous):
         # See https://en.wikipedia.org/wiki/Weibull_distribution#Moments for
         # moment formulas.
         def skew(c):
+            # with k = c
+            # this is the original implementation from the weibull_min
+            # it does not depend on lambda. Is this  an issue?
             gamma1 = sc.gamma(1+1/c)
             gamma2 = sc.gamma(1+2/c)
             gamma3 = sc.gamma(1+3/c)
@@ -2733,6 +2735,7 @@ class weibull_gen(rv_continuous):
             # in kwds. No harm in passing them as guesses, too.
             return super().fit(data, c, loc=loc, scale=scale, **kwds)
 
+# a is the left end-point (no negative numbers)
 weibull = weibull_gen(a=0.0, name='weibull_min')
 
 class weibull_min_gen(rv_continuous):
